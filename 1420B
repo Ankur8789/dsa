@@ -1,0 +1,103 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+ 
+using namespace std;
+using namespace __gnu_pbds;
+ 
+int N, idx;
+tree<int, null_type, less<int>, rb_tree_tag,
+tree_order_statistics_node_update> T;
+typedef long long ll;
+const ll M=1e9+7;
+const ll M_=1e7+10;
+// binary search on real number l=mid||r=mid
+//Oredered set functions
+//it=s.find_by_order(x) (for index)
+// s.order_of_key(x)(no of elements smaller than x)
+ 
+//vector<ll> adj[10001];
+//ll vis[10001];
+//ll dis[10001];
+//int t[10001][10001];
+//optimized binary search
+ 
+/*vector<ll> prime(10000,1);
+//SIEVE ALGO
+for(int i=2;i<=10000;i++)
+  {
+  	if(prime[i]==1)
+  	{
+  		for(int j=2*i;j<=10000;j=j+i)
+  		  prime[j]=0;
+	}
+  }*/
+//bool cmp(pair<ll,ll> a,pair<ll,ll> b)
+//{
+//	return a.second<b.second;
+//}
+int t[15][30];
+int f(int i,int pos,int res,string& s1,string& s2)
+{
+	if(i==s1.length() && pos==res)
+	return 1;
+	if(i==s1.length())
+	return 0;
+	if(t[i][pos]!=-1)
+	return t[i][pos];
+	if(s2[i]=='?')
+     return t[i][pos]= f(i+1,pos+1,res,s1,s2)+f(i+1,pos-1,res,s1,s2);
+     else
+     {
+     	if(s2[i]=='+')
+     	return t[i][pos]=f(i+1,pos+1,res,s1,s2);
+     	else
+     	return t[i][pos]=f(i+1,pos-1,res,s1,s2);
+	 }
+}
+
+ 
+int main() 
+{  memset(t,-1,sizeof(t));
+   string s1,s2;
+   cin>>s1>>s2;
+   int cnt=0;
+   for(ll i=0;i<s1.length();i++)
+   {
+   	 if(s2[i]=='?')
+   	 cnt++;
+   }
+   int des=0;
+   double ans=0.0;
+   for(ll i=0;i<s1.length();i++)
+   {
+   	 if(s1[i]=='+')
+   	 des++;
+   	 else
+   	 des--;
+   }
+   if(cnt==0)
+   {
+   	 int pos=0;
+   	 for(ll i=0;i<s2.length();i++)
+   	 {
+   	    if(s2[i]=='+')
+		   pos++;
+		   else
+		   pos--;	
+	 }
+	 if(pos==des)
+	 ans=1;
+	 else
+	 ans=0;
+   	 
+   }
+   else
+   {   int pos=0;
+   	   int x=f(0,pos,des,s1,s2);
+   	   ans=(double)x/(double)pow(2,cnt);
+   }
+   
+   cout<<setprecision(20)<<ans<<endl;
+   
+}
