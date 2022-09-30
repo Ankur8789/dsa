@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+ 
+using namespace std;
+using namespace __gnu_pbds;
+ 
+int N, idx;
+tree<int, null_type, less<int>, rb_tree_tag,
+tree_order_statistics_node_update> T;
+typedef long long ll;
+const ll M=1e9+7;
+const ll M_=1e7+10;
+// binary search on real number l=mid||r=mid
+//Oredered set functions
+//it=s.find_by_order(x) (for index)
+// s.order_of_key(x)(no of elements smaller than x)
+ 
+//vector<ll> adj[10001];
+//ll vis[10001];
+//ll dis[10001];
+//int t[10001][10001];
+//optimized binary search
+ 
+/*vector<ll> prime(10000,1);
+//SIEVE ALGO
+for(int i=2;i<=10000;i++)
+  {
+  	if(prime[i]==1)
+  	{
+  		for(int j=2*i;j<=10000;j=j+i)
+  		  prime[j]=0;
+	}
+  }*/
+//bool cmp(pair<ll,ll> a,pair<ll,ll> b)
+//{
+//	return a.second<b.second;
+//}
+ll t[10005][100];
+ll f(ll i,vector<pair<ll,string> >& v,ll mask)
+{ 
+	if(mask==7)
+	return 0;
+	//cout<<"a"<<endl;
+	if(i==v.size())
+	return INT_MAX;
+	 if(t[i][mask]!=-1)
+	return t[i][mask];
+
+	ll temp_mask=mask;
+	for(ll j=0;j<(v[i].second).length();j++)
+	{
+		if(v[i].second[j]=='A')
+		 temp_mask=temp_mask|(1<<2);
+		 else if(v[i].second[j]=='B')
+		 temp_mask=temp_mask|(1<<1);
+		 else 
+		 temp_mask=temp_mask|(1<<0);
+	}
+	if(temp_mask==mask)
+	return t[i][mask]=f(i+1,v,mask);
+	else
+	return t[i][mask]=min(v[i].first+f(i+1,v,temp_mask),f(i+1,v,mask));
+	
+}
+
+
+ 
+int main() 
+{
+
+ 
+ ll n;
+ cin>>n;
+ vector<pair<ll,string> > v(n);
+ for(ll i=0;i<n;i++)
+ {
+ 	ll x;
+ 	string str;
+ 	cin>>x>>str;
+ 	pair<ll,string> p;
+ 	p.first=x;
+ 	p.second=str;
+ 	v.push_back(p);
+ }
+ memset(t,-1,sizeof(t));
+ ll mask=0;
+ ll ans=f(0,v,mask);
+ if(ans>=INT_MAX)
+   ans=-1;
+  cout<<ans<<endl;
+   
+}
